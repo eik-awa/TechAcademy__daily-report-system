@@ -22,6 +22,7 @@ h1 {
     padding-top: 17px;
     padding-left: 3%;
     font-size: 24px;
+    display: inline;
     color: #eeeeee;
 }
 
@@ -177,4 +178,12 @@ table#report_list .report_title {
 
 table#report_list .report_action {
     width: 13%;
+}
+
+h3 {
+    font-size: larger;
+}
+
+pre {
+    font-family: "Hiragino Kaku Gothic Pro",Meiryo,"MS PGothic",Helvetica,Arial,sans-serif;
 }
