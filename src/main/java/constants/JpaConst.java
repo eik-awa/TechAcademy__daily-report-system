@@ -43,11 +43,14 @@ public interface JpaConst {
     //Entity名
     String ENTITY_EMP = "employee"; //従業員
     String ENTITY_REP = "report"; //日報
+    // 2022/01/24 追加
+    String ENTITY_GOO = "good"; // いいね
 
     //JPQL内パラメータ
     String JPQL_PARM_CODE = "code"; //社員番号
     String JPQL_PARM_PASSWORD = "password"; //パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; //従業員
+    String JPQL_PARM_ID = "id";
 
     //NamedQueryの nameとquery
     //全ての従業員をidの降順に取得する
@@ -74,5 +77,22 @@ public interface JpaConst {
     //指定した従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
-
+    // いいね機能
+    String TABLE_GOO = "good"; //テーブル名
+    // いいねテーブルカラム
+    String GOO_COL_ID = "id";
+    String GOO_COL_EMP = "employee_id";
+    String GOO_COL_REP = "report_id";
+    // 全てのいいねをidの降順に取得する
+    String Q_GOO_GET_ALL = ENTITY_GOO + ".getAll";
+    String Q_GOO_GET_ALL_DEF = "SELECT g FROM Good AS g ORDER BY g.id DESC";
+    // 全てのいいねの件数を獲得する
+    String Q_GOO_COUNT = ENTITY_GOO + ".count";
+    String Q_GOO_COUNT_DEF = "SELECT COUNT(g) FROM Good AS g";
+    // 指定したレポートにいいねされた人を全件idの降順で取得する
+    String Q_GOO_GET_ALL_MINE = ENTITY_GOO + ".getAllMine";
+    String Q_GOO_GET_ALL_MINE_DEF = "SELECT g FROM Good AS g WHERE g.report = :" + JPQL_PARM_ID + " ORDER BY g.id DESC";
+    // 指定したレポートにいいねされた数を取得する
+    String Q_GOO_COUNT_ALL_MINE = ENTITY_GOO + ".countAllMine";
+    String Q_GOO_COUNT_ALL_MINE_DEF = "SELECT COUNT(g) FROM Good AS g WHERE g.report = :" + JPQL_PARM_ID;
 }
