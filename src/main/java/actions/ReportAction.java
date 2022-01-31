@@ -7,11 +7,13 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
+import actions.views.GoodView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.GoodService;
 import services.ReportService;
 
 /**
@@ -21,6 +23,7 @@ import services.ReportService;
 public class ReportAction extends ActionBase {
 
     private ReportService service;
+    private GoodService good_service;
 
     /**
      * メソッドを実行する
@@ -231,6 +234,41 @@ public class ReportAction extends ActionBase {
                 //一覧画面にリダイレクト
                 redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
 
+            }
+        }
+    }
+    // いいね機能
+    public void good() throws ServletException, IOException {
+        if (checkToken()) {
+            //idを条件に日報データを取得する
+            ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+            //セッションからログイン中の従業員情報を取得
+            EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+            //パラメータの値をもとに日報情報のインスタンスを作成する
+            GoodView gv = new GoodView(
+                    null,
+                    ev, //ログインしている従業員を、日報作成者として登録する
+                    rv);//日報データのIDを登録
+
+            //いいねデータを作成する
+            good_service = new GoodService();
+            List<String> errors = good_service.create(gv);
+            if (errors.size() > 0) {
+                //登録中にエラーがあった場合
+
+                putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
+                putRequestScope(AttributeConst.REPORT, gv);//入力された日報情報
+                putRequestScope(AttributeConst.ERR, errors);//エラーのリスト
+                forward(ForwardConst.FW_TOP_INDEX);
+
+            } else {
+            //登録中にエラーがなかった場合
+            //セッションに登録完了のフラッシュメッセージを設定
+            putSessionScope(AttributeConst.FLUSH, MessageConst.I_GOOD.getMessage());
+
+            //詳細画面を表示
+            forward(ForwardConst.FW_TOP_INDEX);
             }
         }
     }
