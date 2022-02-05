@@ -45,6 +45,7 @@ public interface JpaConst {
     String ENTITY_REP = "report"; //日報
     // 2022/01/24 追加
     String ENTITY_GOO = "good"; // いいね
+    String GOOD_COL_REP = "report_id";
 
     //JPQL内パラメータ
     String JPQL_PARM_CODE = "code"; //社員番号

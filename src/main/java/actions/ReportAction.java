@@ -109,14 +109,7 @@ public class ReportAction extends ActionBase {
             EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
             //パラメータの値をもとに日報情報のインスタンスを作成する
-            ReportView rv = new ReportView(
-                    null,
-                    ev, //ログインしている従業員を、日報作成者として登録する
-                    day,
-                    getRequestParam(AttributeConst.REP_TITLE),
-                    getRequestParam(AttributeConst.REP_CONTENT),
-                    null,
-                    null);
+            ReportView rv = new ReportView();
 
             //日報情報登録
             List<String> errors = service.create(rv);
@@ -239,7 +232,6 @@ public class ReportAction extends ActionBase {
     }
     // いいね機能
     public void good() throws ServletException, IOException {
-        if (checkToken()) {
             //idを条件に日報データを取得する
             ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
             //セッションからログイン中の従業員情報を取得
@@ -256,20 +248,19 @@ public class ReportAction extends ActionBase {
             List<String> errors = good_service.create(gv);
             if (errors.size() > 0) {
                 //登録中にエラーがあった場合
-
                 putRequestScope(AttributeConst.TOKEN, getTokenId()); //CSRF対策用トークン
                 putRequestScope(AttributeConst.REPORT, gv);//入力された日報情報
                 putRequestScope(AttributeConst.ERR, errors);//エラーのリスト
-                forward(ForwardConst.FW_TOP_INDEX);
+                //一覧画面にリダイレクト
+                redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
 
             } else {
             //登録中にエラーがなかった場合
             //セッションに登録完了のフラッシュメッセージを設定
             putSessionScope(AttributeConst.FLUSH, MessageConst.I_GOOD.getMessage());
 
-            //詳細画面を表示
-            forward(ForwardConst.FW_TOP_INDEX);
+          //一覧画面にリダイレクト
+            redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
             }
         }
-    }
 }

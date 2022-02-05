@@ -49,6 +49,7 @@ public class Good {
     private Employee employee;
 
     @ManyToOne
-    @JoinColumn(name = JpaConst.GOO_COL_REP, nullable = false)
+    @JoinColumn(name = JpaConst.GOO_COL_REP, referencedColumnName = "id", nullable = false)
     private Report report;
+
 }

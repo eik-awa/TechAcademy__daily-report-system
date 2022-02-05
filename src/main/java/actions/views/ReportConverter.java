@@ -14,9 +14,10 @@ public class ReportConverter {
     /**
      * ViewモデルのインスタンスからDTOモデルのインスタンスを作成する
      * @param rv ReportViewのインスタンス
+     * @return
      * @return Reportのインスタンス
      */
-    public static Report toModel(ReportView rv) {
+    public static Report toModel (ReportView rv) {
         return new Report(
                 rv.getId(),
                 EmployeeConverter.toModel(rv.getEmployee()),
@@ -24,7 +25,8 @@ public class ReportConverter {
                 rv.getTitle(),
                 rv.getContent(),
                 rv.getCreatedAt(),
-                rv.getUpdatedAt());
+                rv.getUpdatedAt(),
+                null);              // ここは null を入れている
     }
 
     /**
@@ -45,7 +47,10 @@ public class ReportConverter {
                 r.getTitle(),
                 r.getContent(),
                 r.getCreatedAt(),
-                r.getUpdatedAt());
+                r.getUpdatedAt(),
+                r.getGoods().size());     // ここがポイント！
+                // ReportクラスからReportViewクラスに変換するさいにListクラスが保持している
+                // Goodクラスの件数を設定
     }
 
     /**
